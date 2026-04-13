@@ -1,0 +1,611 @@
+/* ==================== АНИМАЦИИ И ЭФФЕКТЫ ==================== */
+
+/* Затухание при входе */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Плавающая анимация */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Пульсирующая анимация */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* Вращение */
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Параллакс эффект */
+@keyframes parallax-shift {
+    0% {
+        transform: translate(0, 0);
+    }
+    100% {
+        transform: translate(0, 50px);
+    }
+}
+
+/* Мерцание цветка */
+@keyframes blossom {
+    0%, 100% {
+        opacity: 0.6;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+}
+
+/* Волна эффект */
+@keyframes wave {
+    0%, 100% {
+        transform: translateY(0) rotateZ(0deg);
+    }
+    50% {
+        transform: translateY(-10px) rotateZ(3deg);
+    }
+}
+
+/* Классы анимаций */
+.fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+}
+
+.fade-in-delay-1 {
+    animation: fadeIn 0.6s ease-out 0.2s forwards;
+    opacity: 0;
+}
+
+.fade-in-delay-2 {
+    animation: fadeIn 0.6s ease-out 0.4s forwards;
+    opacity: 0;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.6s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.6s ease-out forwards;
+}
+
+.slide-in-up {
+    animation: slideInUp 0.6s ease-out forwards;
+}
+
+.float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.rotate {
+    animation: rotate 2s linear infinite;
+}
+
+/* ==================== СЕКЦИИ САЙТА ==================== */
+
+/* Героическая секция */
+.hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #8b7355 0%, #6a5a4a 50%, #5a4a3a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(212, 165, 116, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(232, 213, 196, 0.1) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    animation: slideInUp 0.8s ease-out;
+}
+
+.hero-text {
+    margin-bottom: var(--spacing-2xl);
+}
+
+.hero-title {
+    font-size: 5rem;
+    font-weight: 700;
+    margin-bottom: var(--spacing-lg);
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.bride-name {
+    display: inline-block;
+    color: #e8d5c4;
+    animation: float 3s ease-in-out infinite;
+}
+
+.ampersand {
+    display: inline-block;
+    margin: 0 var(--spacing-lg);
+    color: #d4a574;
+    animation: float 3s ease-in-out 0.5s infinite;
+}
+
+.groom-name {
+    display: inline-block;
+    color: #faf7f2;
+    animation: float 3s ease-in-out 1s infinite;
+}
+
+.hero-subtitle {
+    font-size: var(--font-size-2xl);
+    font-weight: 300;
+    letter-spacing: 2px;
+    margin-bottom: var(--spacing-xl);
+}
+
+.hero-date {
+    font-size: var(--font-size-xl);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-md);
+}
+
+.date-icon {
+    font-size: var(--font-size-2xl);
+    animation: blossom 2s ease-in-out infinite;
+}
+
+.hero-flowers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}
+
+.flower {
+    position: absolute;
+    font-size: 4rem;
+    animation: float 4s ease-in-out infinite;
+    opacity: 0.3;
+}
+
+.flower-1 {
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.flower-2 {
+    top: 60%;
+    right: 15%;
+    animation-delay: 1s;
+}
+
+.flower-3 {
+    bottom: 10%;
+    left: 20%;
+    animation-delay: 2s;
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: bounce 2s infinite;
+}
+
+.mouse {
+    width: 26px;
+    height: 40px;
+    border: 2px solid var(--white);
+    border-radius: 13px;
+    position: relative;
+}
+
+.mouse::after {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    height: 8px;
+    background: var(--white);
+    border-radius: 1px;
+    animation: scroll 1.5s infinite;
+}
+
+@keyframes scroll {
+    0% {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+    100% {
+        opacity: 0;
+        transform: translateX(-50%) translateY(10px);
+    }
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateX(-50%) translateY(0);
+    }
+    50% {
+        transform: translateX(-50%) translateY(-10px);
+    }
+}
+
+/* Параллакс */
+.parallax {
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+@media (max-width: 768px) {
+    .parallax {
+        background-attachment: scroll;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle {
+        font-size: var(--font-size-lg);
+    }
+
+    .bride-name,
+    .ampersand,
+    .groom-name {
+        display: block;
+        margin: var(--spacing-sm) 0;
+    }
+
+    .ampersand {
+        margin: var(--spacing-lg) 0;
+    }
+}
+
+/* ==================== ОСНОВНЫЕ СЕКЦИИ ==================== */
+
+.section-title {
+    font-size: var(--font-size-4xl);
+    text-align: center;
+    position: relative;
+    margin-bottom: var(--spacing-2xl);
+    color: var(--primary);
+}
+
+.section-title::after {
+    content: '';
+    display: block;
+    width: 100px;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+    margin: var(--spacing-lg) auto 0;
+    border-radius: var(--radius-lg);
+}
+
+section {
+    padding: var(--spacing-2xl) 0;
+}
+
+/* About */
+.about {
+    background: linear-gradient(to bottom, var(--light), var(--accent));
+}
+
+.about-content {
+    text-align: center;
+    font-size: var(--font-size-lg);
+    color: var(--dark);
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Event Info */
+.event-info {
+    background: var(--white);
+}
+
+.event-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--spacing-2xl);
+    margin-top: var(--spacing-2xl);
+}
+
+.event-card {
+    text-align: center;
+    padding: var(--spacing-2xl);
+    background: linear-gradient(135deg, var(--accent) 0%, var(--light) 100%);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+    animation: slideInUp 0.6s ease-out;
+}
+
+.event-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
+}
+
+.event-icon {
+    font-size: 3rem;
+    margin-bottom: var(--spacing-lg);
+    display: inline-block;
+    animation: float 3s ease-in-out infinite;
+}
+
+.event-card h3 {
+    color: var(--primary);
+    margin-bottom: var(--spacing-lg);
+}
+
+.event-card p {
+    color: var(--gray-dark);
+    font-size: var(--font-size-base);
+}
+
+/* Timeline/Schedule */
+.schedule {
+    background: linear-gradient(to bottom, var(--white), var(--light));
+}
+
+.timeline {
+    position: relative;
+    padding: var(--spacing-2xl) 0;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(to bottom, var(--primary), var(--secondary));
+}
+
+.timeline-item {
+    margin-bottom: var(--spacing-2xl);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.timeline-item:nth-child(odd) .timeline-content {
+    margin-left: 0;
+    margin-right: 50%;
+    padding-right: var(--spacing-xl);
+    text-align: right;
+}
+
+.timeline-item:nth-child(even) .timeline-content {
+    margin-left: 50%;
+    margin-right: 0;
+    padding-left: var(--spacing-xl);
+    text-align: left;
+}
+
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: var(--secondary);
+    border: 3px solid var(--white);
+    border-radius: 50%;
+    top: 10px;
+    box-shadow: 0 0 0 5px rgba(212, 165, 116, 0.3);
+    z-index: 2;
+}
+
+.timeline-content {
+    background: var(--white);
+    padding: var(--spacing-xl);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.timeline-time {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-sm);
+}
+
+.timeline-event {
+    color: var(--dark);
+    font-size: var(--font-size-base);
+}
+
+/* Dress code и Registry */
+.dress-code,
+.registry {
+    background: var(--white);
+}
+
+.dress-code-content,
+.registry-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: linear-gradient(135deg, var(--accent) 0%, var(--light) 100%);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.dress-code-content > *,
+.registry-content > * {
+    color: var(--dark);
+    margin-bottom: var(--spacing-lg);
+}
+
+.dress-code-content li,
+.registry-content li {
+    list-style-position: inside;
+    margin-bottom: var(--spacing-md);
+}
+
+/* RSVP */
+.rsvp {
+    background: linear-gradient(to bottom, var(--light), var(--accent));
+}
+
+.rsvp-container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.personal-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--dark) 100%);
+    color: var(--white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    margin-bottom: var(--spacing-2xl);
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    animation: fadeInScale 0.6s ease-out;
+}
+
+.personal-card h3 {
+    font-size: var(--font-size-3xl);
+    margin-bottom: var(--spacing-lg);
+    color: var(--secondary);
+}
+
+.personal-card p {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-md);
+}
+
+.personal-info {
+    background: rgba(255, 255, 255, 0.1);
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.rsvp-form {
+    background: var(--white);
+    padding: var(--spacing-2xl);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.rsvp-form .btn-primary {
+    width: 100%;
+    margin-top: var(--spacing-xl);
+}
+
+@media (max-width: 768px) {
+    .timeline::before {
+        left: 0;
+        transform: none;
+    }
+
+    .timeline-item:nth-child(odd) .timeline-content,
+    .timeline-item:nth-child(even) .timeline-content {
+        margin-left: 50px;
+        margin-right: 0;
+        padding-left: var(--spacing-lg);
+        text-align: left;
+    }
+
+    .timeline-dot {
+        left: 0;
+        transform: none;
+    }
+}

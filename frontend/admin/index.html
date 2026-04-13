@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔐 Админ-панель - Свадебный сайт</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+<body class="admin-page">
+    <!-- Сайдбар -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h1 class="sidebar-title">💕 Управление</h1>
+            <button class="sidebar-toggle" id="sidebar-toggle">☰</button>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="nav-item active" data-section="dashboard">
+                <span class="icon">📊</span>
+                <span class="label">Панель управления</span>
+            </a>
+            <a href="#settings" class="nav-item" data-section="settings">
+                <span class="icon">⚙️</span>
+                <span class="label">Параметры свадьбы</span>
+            </a>
+            <a href="#schedule" class="nav-item" data-section="schedule">
+                <span class="icon">📅</span>
+                <span class="label">Расписание</span>
+            </a>
+            <a href="#invitations" class="nav-item" data-section="invitations">
+                <span class="icon">💌</span>
+                <span class="label">Приглашения</span>
+            </a>
+            <a href="#guests" class="nav-item" data-section="guests">
+                <span class="icon">👥</span>
+                <span class="label">Гости</span>
+            </a>
+            <a href="#design" class="nav-item" data-section="design">
+                <span class="icon">🎨</span>
+                <span class="label">Дизайн</span>
+            </a>
+            <a href="/" class="nav-item nav-exit">
+                <span class="icon">🏠</span>
+                <span class="label">На главную</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Основной контент -->
+    <main class="admin-main">
+        <!-- Верхняя панель -->
+        <header class="admin-header">
+            <div class="header-content">
+                <h1 id="section-title">Панель управления</h1>
+                <div class="header-info">
+                    <span id="user-info">Жених & Невеста</span>
+                    <button class="btn-logout">Выход</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Контент разделов -->
+        <div class="admin-content">
+
+            <!-- ПАНЕЛЬ УПРАВЛЕНИЯ -->
+            <section id="dashboard" class="section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <h3>Всего приглашений</h3>
+                        <p class="stat-value" id="stat-invitations">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Приглашено гостей</h3>
+                        <p class="stat-value" id="stat-total-guests">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Подтвердили</h3>
+                        <p class="stat-value confirmed" id="stat-confirmed">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Не ответили</h3>
+                        <p class="stat-value pending" id="stat-pending">0</p>
+                    </div>
+                </div>
+
+                <div class="dashboard-content">
+                    <div class="dashboard-section">
+                        <h2>👥 Последние ответы</h2>
+                        <div class="recent-responses" id="recent-responses">
+                            <p>Загрузка...</p>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-section">
+                        <h2>📊 Статистика по дресс-коду</h2>
+                        <div id="dress-code-stats"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ПАРАМЕТРЫ СВАДЬБЫ -->
+            <section id="settings" class="section">
+                <div class="card">
+                    <h2>Параметры свадьбы</h2>
+                    <form id="wedding-settings-form" class="form-grid">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="groom-name">Имя жениха</label>
+                                <input type="text" id="groom-name" name="groom_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="bride-name">Имя невесты</label>
+                                <input type="text" id="bride-name" name="bride_name" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="wedding-date">Дата свадьбы</label>
+                                <input type="datetime-local" id="wedding-date" name="wedding_date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="wedding-time">Время свадьбы</label>
+                                <input type="time" id="wedding-time" name="wedding_time" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Место проведения</label>
+                            <input type="text" id="location" name="location" placeholder="Усадьба, ресторан и т.д." required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="dress-code">Требования к дресс-коду</label>
+                            <textarea id="dress-code" name="dress_code" rows="4" placeholder="Описание дресс-кода..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="registry-info">Информация о реестре подарков</label>
+                            <textarea id="registry-info" name="registry_info" rows="4" placeholder="Ссылка на реестр, адрес, информация..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="additional-info">Дополнительная информация</label>
+                            <textarea id="additional-info" name="additional_info" rows="4" placeholder="Паркинг, транспорт и т.д."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Сохранить параметры</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- РАСПИСАНИЕ -->
+            <section id="schedule" class="section">
+                <div class="card">
+                    <h2>Расписание события</h2>
+                    <div id="schedule-builder">
+                        <div id="schedule-items"></div>
+                        <button type="button" class="btn btn-secondary" id="add-schedule-item">+ Добавить пункт</button>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="save-schedule" style="margin-top: 20px;">Сохранить расписание</button>
+                </div>
+            </section>
+
+            <!-- ПРИГЛАШЕНИЯ -->
+            <section id="invitations" class="section">
+                <div class="card">
+                    <h2>Создать приглашение</h2>
+                    <form id="create-invitation-form" class="form-grid">
+                        <div class="form-group">
+                            <label for="invitation-type">Тип приглашения</label>
+                            <select id="invitation-type" name="type" required>
+                                <option value="personal">Личное приглашение для гостя</option>
+                                <option value="generic">Общее приглашение</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group" id="max-guests-group">
+                            <label for="max-guests">Максимум гостей</label>
+                            <input type="number" id="max-guests" name="max_guests" min="1" value="1">
+                        </div>
+
+                        <div class="form-group" id="personal-message-group">
+                            <label for="personal-message">Личное сообщение</label>
+                            <textarea id="personal-message" name="personal_message" rows="3" placeholder="Текст личного приглашения..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Создать приглашение</button>
+                    </form>
+                </div>
+
+                <!-- Список созданных приглашений -->
+                <div class="card" style="margin-top: 30px;">
+                    <h2>Созданные приглашения</h2>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Код</th>
+                                    <th>Тип</th>
+                                    <th>Гостей</th>
+                                    <th>Создано</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="invitations-table">
+                                <tr><td colspan="5">Загрузка...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ГОСТИ -->
+            <section id="guests" class="section">
+                <div class="card">
+                    <h2>Список гостей</h2>
+                    <div class="filters">
+                        <select id="guest-filter">
+                            <option value="">Все гости</option>
+                            <option value="confirmed">Подтвердили</option>
+                            <option value="not_confirmed">Не подтвердили</option>
+                            <option value="no_response">Нет ответа</option>
+                        </select>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Имя</th>
+                                    <th>Email</th>
+                                    <th>Телефон</th>
+                                    <th>Статус</th>
+                                    <th>Диетические предпочтения</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+                            <tbody id="guests-table">
+                                <tr><td colspan="6">Загрузка...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button class="btn btn-secondary" id="export-guests">📥 Экспортировать в CSV</button>
+                </div>
+            </section>
+
+            <!-- ДИЗАЙН -->
+            <section id="design" class="section">
+                <div class="card">
+                    <h2>Цветовая схема</h2>
+                    <form id="design-form" class="form-grid">
+                        <div class="color-picker-group">
+                            <div class="form-group">
+                                <label for="main-color">Основной цвет</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="main-color" name="main_color" value="#8b7355">
+                                    <span id="main-color-code">#8b7355</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="secondary-color">Вторичный цвет</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="secondary-color" name="secondary_color" value="#d4a574">
+                                    <span id="secondary-color-code">#d4a574</span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="accent-color">Дополнительный цвет</label>
+                                <div class="color-picker-wrapper">
+                                    <input type="color" id="accent-color" name="accent_color" value="#e8d5c4">
+                                    <span id="accent-color-code">#e8d5c4</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Сохранить дизайн</button>
+                    </form>
+
+                    <div style="margin-top: 40px;">
+                        <h3>Предпросмотр</h3>
+                        <div class="color-preview">
+                            <div class="preview-box" id="preview-main"></div>
+                            <div class="preview-box" id="preview-secondary"></div>
+                            <div class="preview-box" id="preview-accent"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Модальное окно для QR кода -->
+    <div id="qr-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <button class="modal-close">&times;</button>
+            <h2>QR код приглашения</h2>
+            <div id="qr-image-container"></div>
+            <div id="invitation-link-container">
+                <label>Ссылка на приглашение:</label>
+                <input type="text" id="invitation-link" readonly>
+                <button class="btn btn-secondary" id="copy-link">Скопировать ссылку</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>

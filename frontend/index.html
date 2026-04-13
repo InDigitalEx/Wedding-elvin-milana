@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💕 Наша свадьба - Элвин & Милана</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+    <!-- Навигация -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <div class="logo">
+                    <span class="logo-icon">💕</span>
+                    <span class="logo-text">Наша Свадьба</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Главная</a></li>
+                    <li><a href="#about" class="nav-link">О нас</a></li>
+                    <li><a href="#schedule" class="nav-link">Программа</a></li>
+                    <li><a href="#dress-code" class="nav-link">Дресс-код</a></li>
+                    <li><a href="#registry" class="nav-link">Подарки</a></li>
+                    <li><a href="#rsvp" class="nav-link">Подтвердить</a></li>
+                    <li><a href="/admin" class="nav-link admin-link">🔐 Админ</a></li>
+                </ul>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Героическая секция -->
+    <section id="home" class="hero parallax">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title fade-in">
+                    <span class="bride-name">Милана</span>
+                    <span class="ampersand">&</span>
+                    <span class="groom-name">Элвин</span>
+                </h1>
+                <p class="hero-subtitle fade-in-delay-1">Приглашаем вас на нашу свадьбу</p>
+                <div class="hero-date fade-in-delay-2">
+                    <span class="date-icon">📅</span>
+                    <span id="wedding-date-display"></span>
+                </div>
+            </div>
+            <div class="hero-flowers">
+                <div class="flower flower-1">🌹</div>
+                <div class="flower flower-2">🌸</div>
+                <div class="flower flower-3">🌷</div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- О нас -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">О нас</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p id="about-text-content">
+                        Мы с радостью делимся этим особенным днем с нашими близкими!
+                        Ваше присутствие - это главный подарок для нас.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Информация о мероприятии -->
+    <section id="event-info" class="event-info">
+        <div class="container">
+            <h2 class="section-title">Информация о мероприятии</h2>
+            <div class="event-grid">
+                <div class="event-card">
+                    <div class="event-icon">📍</div>
+                    <h3>Место</h3>
+                    <p id="location-text"></p>
+                </div>
+                <div class="event-card">
+                    <div class="event-icon">🕐</div>
+                    <h3>Время</h3>
+                    <p id="time-text"></p>
+                </div>
+                <div class="event-card">
+                    <div class="event-icon">📸</div>
+                    <h3>Фотография</h3>
+                    <p>Фотографирование начнется за 30 минут до начала</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Расписание -->
+    <section id="schedule" class="schedule">
+        <div class="container">
+            <h2 class="section-title">Программа дня</h2>
+            <div class="timeline">
+                <div id="schedule-timeline"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Дресс-код -->
+    <section id="dress-code" class="dress-code">
+        <div class="container">
+            <h2 class="section-title">Дресс-код</h2>
+            <div class="dress-code-content">
+                <div id="dress-code-text"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Реестр подарков -->
+    <section id="registry" class="registry">
+        <div class="container">
+            <h2 class="section-title">Реестр подарков</h2>
+            <div class="registry-content">
+                <div id="registry-text"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="rsvp">
+        <div class="container">
+            <h2 class="section-title">Подтвердить присутствие</h2>
+            
+            <!-- Если это уникальное приглашение -->
+            <div id="personal-invitation" class="rsvp-container" style="display: none;">
+                <div class="personal-card">
+                    <h3 id="personal-guest-name"></h3>
+                    <p id="personal-message"></p>
+                    <div class="personal-info">
+                        <p>Приглашено гостей: <span id="personal-guest-count">1</span></p>
+                        <div id="plus-ones"></div>
+                    </div>
+                </div>
+                <form id="rsvp-form" class="rsvp-form">
+                    <div class="form-group">
+                        <label for="attending">Вы сможете присутствовать?</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="attending" value="yes" required>
+                                <span>Да, с удовольствием!</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="attending" value="no">
+                                <span>Нет, извините</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="dietary-group">
+                        <label>Диетические предпочтения</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="vegetarian">
+                                <span>Вегетарианское меню</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="vegan">
+                                <span>Веганское меню</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="gluten-free">
+                                <span>Без глютена</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="kosher">
+                                <span>Кошерное</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Личное сообщение (опционально)</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Ваши пожелания..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Подтвердить</button>
+                </form>
+            </div>
+
+            <!-- Если это общее приглашение -->
+            <div id="generic-invitation" class="rsvp-container" style="display: none;">
+                <p>Спасибо за посещение нашего сайта! У вас есть общее приглашение.</p>
+                <a href="#" class="btn btn-primary">Добавить свои данные</a>
+            </div>
+
+            <!-- Если приглашение не найдено -->
+            <div id="no-invitation" class="rsvp-container">
+                <p>Пожалуйста, используйте ссылку приглашения для подтверждения присутствия.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Наша Свадьба. Сделано с ❤️</p>
+            <p id="footer-date"></p>
+        </div>
+    </footer>
+
+    <script src="js/config.js"></script>
+    <script src="js/api.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
