@@ -2,7 +2,7 @@
 Pydantic схемы для валидации данных
 """
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 from typing import Optional, List
 from datetime import datetime
 
@@ -18,7 +18,7 @@ class WeddingSettingsCreate(BaseModel):
     """Схема для создания/обновления параметров свадьбы"""
     groom_name: str = Field(..., min_length=1)
     bride_name: str = Field(..., min_length=1)
-    wedding_date: datetime
+    wedding_date: datetime  # Принимаем как ISO строку, парсим в datetime
     wedding_time: str
     location: str
     dress_code: Optional[str] = None
@@ -28,6 +28,20 @@ class WeddingSettingsCreate(BaseModel):
     accent_color: str = "#e8d5c4"
     schedule: Optional[List[ScheduleItem]] = None
     additional_info: Optional[str] = None
+
+    @field_validator('wedding_date', mode='before')
+    @classmethod
+    def parse_wedding_date(cls, v):
+        """Парсить ISO string в datetime"""
+        if isinstance(v, str):
+            try:
+                # Удалить 'Z' если есть, заменить на '+00:00'
+                iso_str = v.replace('Z', '+00:00')
+                return datetime.fromisoformat(iso_str)
+            except (ValueError, TypeError):
+                # Если parsing failed, вернуть как есть - Pydantic выведет ошибку
+                return v
+        return v
 
     model_config = ConfigDict(from_attributes=True)
 

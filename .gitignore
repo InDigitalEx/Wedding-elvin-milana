@@ -1,0 +1,4 @@
+# Ignore all PNG files in the qr_codes directory
+backend/qr_codes/*.png
+backend/__pycache__
+backend/wedding.db

@@ -117,7 +117,7 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label for="wedding-date">Дата свадьбы</label>
-                                <input type="datetime-local" id="wedding-date" name="wedding_date" required>
+                                <input type="date" id="wedding-date" name="wedding_date" required>
                             </div>
                             <div class="form-group">
                                 <label for="wedding-time">Время свадьбы</label>
@@ -167,26 +167,51 @@
                 <div class="card">
                     <h2>Создать приглашение</h2>
                     <form id="create-invitation-form" class="form-grid">
-                        <div class="form-group">
-                            <label for="invitation-type">Тип приглашения</label>
-                            <select id="invitation-type" name="type" required>
-                                <option value="personal">Личное приглашение для гостя</option>
-                                <option value="generic">Общее приглашение</option>
-                            </select>
+                        <!-- Секция для личных приглашений с добавлением гостей -->
+                        <div id="personal-guests-section" style="grid-column: 1 / -1;">
+                            <h3 style="margin-top: 0; margin-bottom: 15px;">Гости на этом приглашении</h3>
+                            <div id="guests-list" style="border: 1px solid #ddd; padding: 15px; border-radius: 4px; background-color: #fafafa; margin-bottom: 15px;">
+                                <!-- Динамически добавляются строки гостей -->
+                            </div>
+                            <button type="button" class="btn btn-secondary" id="add-guest-btn" style="width: 100%; margin-bottom: 15px;">
+                                + Добавить еще гостя
+                            </button>
                         </div>
 
-                        <div class="form-group" id="max-guests-group">
-                            <label for="max-guests">Максимум гостей</label>
-                            <input type="number" id="max-guests" name="max_guests" min="1" value="1">
-                        </div>
-
-                        <div class="form-group" id="personal-message-group">
-                            <label for="personal-message">Личное сообщение</label>
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label for="personal-message">Личное сообщение (опционально)</label>
                             <textarea id="personal-message" name="personal_message" rows="3" placeholder="Текст личного приглашения..."></textarea>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Создать приглашение</button>
+                        <button type="submit" class="btn btn-primary" style="grid-column: 1 / -1;">Создать приглашение</button>
                     </form>
+                    <style>
+                        .guest-entry {
+                            display: flex;
+                            gap: 10px;
+                            margin-bottom: 10px;
+                            align-items: center;
+                        }
+                        .guest-entry input {
+                            flex: 1;
+                            padding: 10px;
+                            border: 1px solid #ccc;
+                            border-radius: 4px;
+                            font-family: inherit;
+                        }
+                        .guest-entry .btn-remove {
+                            padding: 8px 12px;
+                            background-color: #ef5350;
+                            color: white;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                            font-size: 16px;
+                        }
+                        .guest-entry .btn-remove:hover {
+                            background-color: #f44336;
+                        }
+                    </style>
                 </div>
 
                 <!-- Список созданных приглашений -->
@@ -298,6 +323,7 @@
             <button class="modal-close">&times;</button>
             <h2>QR код приглашения</h2>
             <div id="qr-image-container"></div>
+            <button class="btn btn-secondary" id="download-qr" style="width: 100%; margin-top: 15px; margin-bottom: 15px;">⬇ Скачать QR код</button>
             <div id="invitation-link-container">
                 <label>Ссылка на приглашение:</label>
                 <input type="text" id="invitation-link" readonly>
@@ -309,5 +335,12 @@
     <script src="../js/config.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/admin.js"></script>
+    <script>
+        // Инициализация админ-панели когда типы загружены
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('📄 DOM загружен, инициализирую админ-панель...');
+            admin = new AdminPanel();
+        });
+    </script>
 </body>
 </html>

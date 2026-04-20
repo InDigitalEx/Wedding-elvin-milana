@@ -10,6 +10,7 @@ class WeddingAPI {
      */
     async get(endpoint) {
         try {
+            console.log(`🌐 GET ${this.baseURL}${endpoint}`);
             const response = await fetch(`${this.baseURL}${endpoint}`, {
                 method: 'GET',
                 headers: {
@@ -21,9 +22,11 @@ class WeddingAPI {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
 
-            return await response.json();
+            const data = await response.json();
+            console.log(`✅ GET успешен для ${endpoint}`, data);
+            return data;
         } catch (error) {
-            console.error('GET Error:', error);
+            console.error(`❌ GET Error для ${endpoint}:`, error);
             throw error;
         }
     }
@@ -205,7 +208,9 @@ class WeddingAPI {
 }
 
 // Инициализация API
+console.log('🔌 Инициализирую WeddingAPI с baseURL:', CONFIG.API_BASE_URL);
 const api = new WeddingAPI(CONFIG.API_BASE_URL);
+console.log('✅ API инициализирован');
 
 // Утилиты для работы с API
 const APIUtils = {
@@ -248,8 +253,10 @@ const APIUtils = {
      * Генерация URL приглашения
      */
     getInvitationURL(code) {
+        // Если мы на admin странице, нужно вернуться на главную
         const baseURL = window.location.origin;
-        return `${baseURL}/?code=${code}`;
+        const path = window.location.pathname.includes('/admin') ? '/' : window.location.pathname;
+        return `${baseURL}${path}?code=${code}`;
     },
 
     /**

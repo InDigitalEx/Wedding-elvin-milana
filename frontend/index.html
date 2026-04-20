@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💕 Наша свадьба - Элвин & Милана</title>
+    <title>💕 Приглашение на свадьбу</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
 </head>
@@ -14,7 +14,7 @@
             <div class="navbar-content">
                 <div class="logo">
                     <span class="logo-icon">💕</span>
-                    <span class="logo-text">Наша Свадьба</span>
+                    <span class="logo-text"> Приглашение</span>
                 </div>
                 <ul class="nav-menu">
                     <li><a href="#home" class="nav-link active">Главная</a></li>
@@ -23,7 +23,7 @@
                     <li><a href="#dress-code" class="nav-link">Дресс-код</a></li>
                     <li><a href="#registry" class="nav-link">Подарки</a></li>
                     <li><a href="#rsvp" class="nav-link">Подтвердить</a></li>
-                    <li><a href="/admin" class="nav-link admin-link">🔐 Админ</a></li>
+                    <li style="display: none;"><a href="/admin" class="nav-link admin-link">🔐 Админ</a></li>
                 </ul>
                 <div class="hamburger">
                     <span></span>
@@ -39,9 +39,9 @@
         <div class="hero-content">
             <div class="hero-text">
                 <h1 class="hero-title fade-in">
-                    <span class="bride-name">Милана</span>
-                    <span class="ampersand">&</span>
                     <span class="groom-name">Элвин</span>
+                    <span class="ampersand">&</span>
+                    <span class="bride-name">Милана</span>
                 </h1>
                 <p class="hero-subtitle fade-in-delay-1">Приглашаем вас на нашу свадьбу</p>
                 <div class="hero-date fade-in-delay-2">
@@ -57,6 +57,80 @@
         </div>
         <div class="scroll-indicator">
             <div class="mouse"></div>
+        </div>
+    </section>
+
+    <!-- RSVP -->
+    <section id="rsvp" class="rsvp">
+        <div class="container">
+            <h2 class="section-title">Подтвердить присутствие</h2>
+            
+            <!-- Если это уникальное приглашение -->
+            <div id="personal-invitation" class="rsvp-container" style="display: none;">
+                <div class="personal-card">
+                    <h3 id="personal-guest-name"></h3>
+                    <div class="personal-info">
+                        <p id="personal-message"></p>
+                        <p style="display: none;">Приглашено гостей: <span id="personal-guest-count">1</span></p>
+                        <div id="plus-ones"></div>
+                    </div>
+                </div>
+                <form id="rsvp-form" class="rsvp-form">
+                    <div class="form-group">
+                        <label for="attending">Вы сможете присутствовать?</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="attending" value="yes" required>
+                                <span>Да, с удовольствием!</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="attending" value="no">
+                                <span>Нет, извините</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="dietary-group" style="display: none;">
+                        <label>Диетические предпочтения</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="vegetarian">
+                                <span>Вегетарианское меню</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="vegan">
+                                <span>Веганское меню</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="gluten-free">
+                                <span>Без глютена</span>
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" name="dietary" value="kosher">
+                                <span>Кошерное</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Личное сообщение молодоженам (опционально)</label>
+                        <textarea id="message" name="message" rows="4" placeholder="Ваши пожелания..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Подтвердить</button>
+                </form>
+            </div>
+
+            <!-- Если это общее приглашение -->
+            <div id="generic-invitation" class="rsvp-container" style="display: none;">
+                <p>Спасибо за посещение нашего сайта! У вас есть общее приглашение.</p>
+                <a href="#" class="btn btn-primary">Добавить свои данные</a>
+            </div>
+
+            <!-- Если приглашение не найдено -->
+            <div id="no-invitation" class="rsvp-container" style="display: none;">
+                <p>Пожалуйста, используйте ссылку приглашения для подтверждения присутствия.</p>
+            </div>
         </div>
     </section>
 
@@ -129,85 +203,12 @@
         </div>
     </section>
 
-    <!-- RSVP -->
-    <section id="rsvp" class="rsvp">
-        <div class="container">
-            <h2 class="section-title">Подтвердить присутствие</h2>
-            
-            <!-- Если это уникальное приглашение -->
-            <div id="personal-invitation" class="rsvp-container" style="display: none;">
-                <div class="personal-card">
-                    <h3 id="personal-guest-name"></h3>
-                    <p id="personal-message"></p>
-                    <div class="personal-info">
-                        <p>Приглашено гостей: <span id="personal-guest-count">1</span></p>
-                        <div id="plus-ones"></div>
-                    </div>
-                </div>
-                <form id="rsvp-form" class="rsvp-form">
-                    <div class="form-group">
-                        <label for="attending">Вы сможете присутствовать?</label>
-                        <div class="radio-group">
-                            <label class="radio-label">
-                                <input type="radio" name="attending" value="yes" required>
-                                <span>Да, с удовольствием!</span>
-                            </label>
-                            <label class="radio-label">
-                                <input type="radio" name="attending" value="no">
-                                <span>Нет, извините</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="dietary-group">
-                        <label>Диетические предпочтения</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="dietary" value="vegetarian">
-                                <span>Вегетарианское меню</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="dietary" value="vegan">
-                                <span>Веганское меню</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="dietary" value="gluten-free">
-                                <span>Без глютена</span>
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" name="dietary" value="kosher">
-                                <span>Кошерное</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="message">Личное сообщение (опционально)</label>
-                        <textarea id="message" name="message" rows="4" placeholder="Ваши пожелания..."></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Подтвердить</button>
-                </form>
-            </div>
-
-            <!-- Если это общее приглашение -->
-            <div id="generic-invitation" class="rsvp-container" style="display: none;">
-                <p>Спасибо за посещение нашего сайта! У вас есть общее приглашение.</p>
-                <a href="#" class="btn btn-primary">Добавить свои данные</a>
-            </div>
-
-            <!-- Если приглашение не найдено -->
-            <div id="no-invitation" class="rsvp-container">
-                <p>Пожалуйста, используйте ссылку приглашения для подтверждения присутствия.</p>
-            </div>
-        </div>
-    </section>
-
     <!-- Футер -->
     <footer class="footer">
         <div class="container">
-            <p>&copy; 2026 Наша Свадьба. Сделано с ❤️</p>
-            <p id="footer-date"></p>
+            <p>&copy; 2026 Maksim Zhivaikin. Сделано с ❤️</p>
+            <p><a href="https://t.me/InDigitalE8">Связаться с нами</a></p>
+            <p id="footer-date" style="display: none;"></p>
         </div>
     </footer>
 

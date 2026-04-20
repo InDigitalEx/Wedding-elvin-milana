@@ -12,7 +12,7 @@ class AdminPanel {
      * Инициализация админ-панели
      */
     async init() {
-        console.log('🔐 Инициализация админ-панели...');
+        console.log('🔐 Инициализация админ-панели... (счётчик будет показывать если будет дублирование)');
         
         try {
             // Загрузить данные
@@ -52,15 +52,17 @@ class AdminPanel {
      * Обновить панель управления
      */
     updateDashboard() {
-        if (!this.weddingData || !this.weddingData.total_guests) {
+        if (!this.weddingData) {
             return;
         }
 
+        const totalGuests = this.weddingData.total_guests || 0;
+        const confirmedGuests = this.weddingData.confirmed_guests || 0;
+
         document.getElementById('stat-invitations').textContent = this.weddingData.invitations?.length || 0;
-        document.getElementById('stat-total-guests').textContent = this.weddingData.total_guests || 0;
-        document.getElementById('stat-confirmed').textContent = this.weddingData.confirmed_guests || 0;
-        document.getElementById('stat-pending').textContent = 
-            (this.weddingData.total_guests - this.weddingData.confirmed_guests) || 0;
+        document.getElementById('stat-total-guests').textContent = totalGuests;
+        document.getElementById('stat-confirmed').textContent = confirmedGuests;
+        document.getElementById('stat-pending').textContent = totalGuests - confirmedGuests;
 
         this.updateRecentResponses();
     }
@@ -71,8 +73,10 @@ class AdminPanel {
     updateRecentResponses() {
         const container = document.getElementById('recent-responses');
         
+        if (!container) return;
+        
         if (this.guests.length === 0) {
-            container.innerHTML = '<p>Нет ответов</p>';
+            container.innerHTML = '<p>Ответов еще нет</p>';
             return;
         }
 
@@ -140,21 +144,21 @@ class AdminPanel {
         // Форма параметров свадьбы
         const weddingForm = document.getElementById('wedding-settings-form');
         if (weddingForm) {
-            weddingForm.addEventListener('submit', (e) => this.handleWeddingSubmit(e));
+            weddingForm.onsubmit = (e) => this.handleWeddingSubmit(e);
             this.loadWeddingForm();
         }
 
         // Форма создания приглашения
         const invitationForm = document.getElementById('create-invitation-form');
         if (invitationForm) {
-            invitationForm.addEventListener('submit', (e) => this.handleInvitationSubmit(e));
-            this.setupInvitationType();
+            invitationForm.onsubmit = (e) => this.handleInvitationSubmit(e);
+            this.setupGuestForm();
         }
 
         // Форма дизайна
         const designForm = document.getElementById('design-form');
         if (designForm) {
-            designForm.addEventListener('submit', (e) => this.handleDesignSubmit(e));
+            designForm.onsubmit = (e) => this.handleDesignSubmit(e);
             this.setupColorPickers();
         }
 
@@ -178,22 +182,79 @@ class AdminPanel {
     }
 
     /**
-     * Установить тип приглашения
+     * Инициализировать форму добавления гостей
      */
-    setupInvitationType() {
-        const typeSelect = document.getElementById('invitation-type');
-        typeSelect.addEventListener('change', (e) => {
-            const maxGuestsGroup = document.getElementById('max-guests-group');
-            const personalMessageGroup = document.getElementById('personal-message-group');
-            
-            if (e.target.value === 'generic') {
-                maxGuestsGroup.style.display = 'none';
-                personalMessageGroup.style.display = 'none';
-            } else {
-                maxGuestsGroup.style.display = 'block';
-                personalMessageGroup.style.display = 'block';
-            }
-        });
+    setupGuestForm() {
+        console.log('🔧 setupGuestForm вызvan');
+        
+        // Добавить первого гостя по умолчанию
+        const guestsList = document.getElementById('guests-list');
+        if (guestsList && guestsList.children.length === 0) {
+            console.log('➕ Добавляю первого гостя');
+            this.addGuestEntry();
+        }
+
+        // Обработчик кнопки "Добавить гостя" - используем делегирование событий
+        const addGuestBtn = document.getElementById('add-guest-btn');
+        if (addGuestBtn) {
+            console.log('✅ Обработчик кнопки "Добавить гостя" присоединен');
+            addGuestBtn.onclick = (e) => {
+                e.preventDefault();
+                console.log('➕👆 Клик на кнопку добавления гостя');
+                this.addGuestEntry();
+            };
+        } else {
+            console.warn('❌ Кнопка "Добавить гостя" не найдена');
+        }
+
+        // Обработчик кнопки скачивания QR кода
+        const downloadQrBtn = document.getElementById('download-qr');
+        if (downloadQrBtn) {
+            downloadQrBtn.onclick = () => {
+                console.log('⬇️ Клик на скачивание QR');
+                this.downloadQRCode();
+            };
+        }
+    }
+
+    /**
+     * Добавить входную строку для гостя
+     */
+    addGuestEntry() {
+        const guestsList = document.getElementById('guests-list');
+        if (!guestsList) {
+            console.error('❌ guests-list не найден');
+            return;
+        }
+        
+        const entryCount = guestsList.children.length;
+        console.log(`✅ Добавляю гостя #${entryCount + 1}`);
+        
+        const entry = document.createElement('div');
+        entry.className = 'guest-entry';
+        
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.placeholder = 'Имя гостя';
+        input.setAttribute('data-guest-index', entryCount);
+        input.required = true;
+        
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'btn-remove';
+        removeBtn.textContent = '✕';
+        removeBtn.onclick = (e) => {
+            e.preventDefault();
+            entry.remove();
+        };
+        
+        entry.appendChild(input);
+        entry.appendChild(removeBtn);
+        guestsList.appendChild(entry);
+        
+        // Фокус на новое поле
+        input.focus();
+        console.log(`✅ Гость #${entryCount + 1} добавлен и в фокусе`);
     }
 
     /**
@@ -207,9 +268,9 @@ class AdminPanel {
         document.getElementById('groom-name').value = data.groom_name;
         document.getElementById('bride-name').value = data.bride_name;
         
-        // Преобразовать дату в формат input datetime-local
+        // Преобразовать дату в формат для input type="date" (YYYY-MM-DD)
         const date = new Date(data.wedding_date);
-        const dateStr = date.toISOString().slice(0, 16);
+        const dateStr = date.toISOString().slice(0, 10);
         document.getElementById('wedding-date').value = dateStr;
         
         document.getElementById('wedding-time').value = data.wedding_time;
@@ -225,24 +286,40 @@ class AdminPanel {
     async handleWeddingSubmit(e) {
         e.preventDefault();
 
+        // Получить дату из input type="date" (формат: YYYY-MM-DD)
+        const dateInput = document.getElementById('wedding-date').value;
+        const timeInput = document.getElementById('wedding-time').value || '00:00';
+        
+        // Комбинировать дату и время в ISO формат
+        let weddingDate;
+        if (dateInput) {
+            const dateTimeString = `${dateInput}T${timeInput}:00`;
+            weddingDate = new Date(dateTimeString).toISOString();
+        } else {
+            weddingDate = new Date().toISOString();
+        }
+
         const data = {
             groom_name: document.getElementById('groom-name').value,
             bride_name: document.getElementById('bride-name').value,
-            wedding_date: new Date(document.getElementById('wedding-date').value),
-            wedding_time: document.getElementById('wedding-time').value,
+            wedding_date: weddingDate,
+            wedding_time: timeInput,
             location: document.getElementById('location').value,
-            dress_code: document.getElementById('dress-code').value,
-            registry_info: document.getElementById('registry-info').value,
-            additional_info: document.getElementById('additional-info').value,
+            dress_code: document.getElementById('dress-code').value || '',
+            registry_info: document.getElementById('registry-info').value || '',
+            additional_info: document.getElementById('additional-info').value || '',
         };
 
         try {
-            await api.createOrUpdateWedding(data);
+            const result = await api.createOrUpdateWedding(data);
             showNotification('✓ Параметры свадьбы сохранены', 'success');
-            this.weddingData = { ...this.weddingData, ...data };
+            
+            // Обновить данные с сервера (включая ID)
+            this.weddingData = result;
+            this.loadWeddingForm();
         } catch (error) {
             console.error('Ошибка сохранения:', error);
-            showNotification('✗ Ошибка сохранения параметров', 'error');
+            showNotification('✗ Ошибка сохранения параметров: ' + (error.message || 'Неизвестная ошибка'), 'error');
         }
     }
 
@@ -250,18 +327,58 @@ class AdminPanel {
      * Обработить отправку формы создания приглашения
      */
     async handleInvitationSubmit(e) {
+        console.log('🎯 handleInvitationSubmit вызвана');
         e.preventDefault();
 
-        const data = {
+        // Убедиться что есть ID свадьбы
+        if (!this.weddingData || !this.weddingData.id) {
+            showNotification('❌ Сначала сохраните параметры свадьбы', 'error');
+            return;
+        }
+
+        const personalMessage = document.getElementById('personal-message').value || '';
+        
+        // Получить имена гостей
+        const guestInputs = document.querySelectorAll('#guests-list input[type="text"]');
+        const guestNames = Array.from(guestInputs)
+            .map(input => input.value.trim())
+            .filter(name => name.length > 0);
+
+        if (guestNames.length === 0) {
+            showNotification('❌ Добавьте хотя бы одного гостя', 'error');
+            return;
+        }
+
+        console.log(`📝 Создание приглашения с ${guestNames.length} гостями:`, guestNames);
+
+        // Данные приглашения - всегда личное
+        let data = {
             wedding_id: this.weddingData.id,
-            type: document.getElementById('invitation-type').value,
-            max_guests: parseInt(document.getElementById('max-guests').value) || 1,
-            personal_message: document.getElementById('personal-message').value,
+            type: 'personal',
+            personal_message: personalMessage,
+            max_guests: guestNames.length,
         };
 
         try {
+            console.log('📤 Отправляю запрос на создание приглашения');
             const invitation = await api.createInvitation(data);
+            console.log('✅ Приглашение создано с ID:', invitation.id);
             showNotification('✓ Приглашение создано', 'success');
+            
+            // Создать гостей для приглашения
+            if (guestNames.length > 0) {
+                for (const guestName of guestNames) {
+                    try {
+                        await api.createGuest({
+                            invitation_id: invitation.id,
+                            name: guestName,
+                        });
+                    } catch (error) {
+                        console.warn(`Ошибка создания гостя "${guestName}":`, error);
+                    }
+                }
+                showNotification(`✓ Приглашение и ${guestNames.length} гостей созданы`, 'success');
+            }
             
             // Показать QR код и ссылку
             this.showInvitationQR(invitation);
@@ -272,9 +389,16 @@ class AdminPanel {
             
             // Очистить форму
             e.target.reset();
+            
+            // Очистить список гостей и добавить первое поле
+            const guestsList = document.getElementById('guests-list');
+            if (guestsList) {
+                guestsList.innerHTML = '';
+                this.addGuestEntry();
+            }
         } catch (error) {
             console.error('Ошибка создания приглашения:', error);
-            showNotification('✗ Ошибка создания приглашения', 'error');
+            showNotification('✗ Ошибка создания приглашения: ' + (error.message || 'Неизвестная ошибка'), 'error');
         }
     }
 
@@ -303,6 +427,27 @@ class AdminPanel {
         document.querySelector('.modal-close').onclick = () => {
             modal.style.display = 'none';
         };
+
+        // Сохранить URL QR для скачивания
+        this.lastQRCodeURL = qrCodeURL;
+    }
+
+    /**
+     * Скачать QR код
+     */
+    downloadQRCode() {
+        if (!this.lastQRCodeURL) {
+            showNotification('❌ QR код не найден', 'error');
+            return;
+        }
+
+        // Создать ссылку для скачивания
+        const link = document.createElement('a');
+        link.href = this.lastQRCodeURL;
+        link.download = `qr-code-${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     /**
@@ -625,10 +770,5 @@ class AdminPanel {
     }
 }
 
-// Глобальная переменная админ-панели
+// Глобальная переменная админ-панели (будет инициализирована в HTML)
 let admin;
-
-// Инициализировать админ-панель при загрузке
-document.addEventListener('DOMContentLoaded', () => {
-    admin = new AdminPanel();
-});

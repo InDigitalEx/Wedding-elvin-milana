@@ -30,6 +30,9 @@ class WeddingSite {
             // Загрузить информацию о приглашении, если есть код
             if (this.invitationCode) {
                 await this.loadInvitation();
+            } else {
+                // Скрыть RSVP раздел если нет кода приглашения
+                document.getElementById('rsvp').style.display = 'none';
             }
             
             console.log('✅ Инициализация завершена');
@@ -90,32 +93,59 @@ class WeddingSite {
      * Показать личное приглашение
      */
     showPersonalInvitation(invitation, guests) {
+        const rsvpSection = document.getElementById('rsvp');
+        const personalDiv = document.getElementById('personal-invitation');
+        const genericDiv = document.getElementById('generic-invitation');
+        const noInvDiv = document.getElementById('no-invitation');
+        
         if (invitation.is_generic) {
-            // Общее приглашение
-            document.getElementById('generic-invitation').style.display = 'block';
+            // Общее приглашение - скрыть весь RSVP раздел
+            rsvpSection.style.display = 'none';
+            genericDiv.style.display = 'none';
+            personalDiv.style.display = 'none';
+            noInvDiv.style.display = 'none';
         } else {
-            // Личное приглашение
-            const personalDiv = document.getElementById('personal-invitation');
-            const noInvDiv = document.getElementById('no-invitation');
-            
+            // Личное приглашение - показать RSVP раздел
+            rsvpSection.style.display = 'block';
             personalDiv.style.display = 'block';
+            genericDiv.style.display = 'none';
             noInvDiv.style.display = 'none';
             
-            // Если это приглашение на одного гостя
+            // Если есть гости в приглашении
             if (guests.length > 0) {
-                const guest = guests[0];
-                document.getElementById('personal-guest-name').textContent = guest.name;
-                document.getElementById('personal-message').textContent = invitation.personal_message || '';
-                document.getElementById('personal-guest-count').textContent = invitation.max_guests;
+                // Построить приветствие с именами всех гостей
+                const guestNames = guests.map(g => g.name);
+                const greeting = this.buildRussianGreeting(guestNames);
                 
-                this.currentGuest = guest;
+                document.getElementById('personal-guest-name').textContent = greeting;
+                document.getElementById('personal-message').textContent = invitation.personal_message || '';
+                
+                // Сохранить первого гостя для RSVP формы
+                this.currentGuest = guests[0];
                 this.currentInvitation = invitation;
                 
                 // Заполнить форму, если уже ответил
-                if (guest.attending !== null) {
-                    this.fillRSVPForm(guest);
+                if (guests[0].attending !== null) {
+                    this.fillRSVPForm(guests[0]);
                 }
             }
+        }
+    }
+
+    /**
+     * Построить русское приветствие с правильной грамматикой
+     */
+    buildRussianGreeting(names) {
+        if (names.length === 0) {
+            return 'Уважаемый(ые) гость(и)';
+        } else if (names.length === 1) {
+            return `Уважаемый ${names[0]}`;
+        } else if (names.length === 2) {
+            return `Уважаемые ${names[0]} и ${names[1]}`;
+        } else {
+            // Для более чем 2 гостей: "Уважаемые Иван, Мария и Петр"
+            const allButLast = names.slice(0, -1).join(', ');
+            return `Уважаемые ${allButLast} и ${names[names.length - 1]}`;
         }
     }
 
@@ -123,6 +153,8 @@ class WeddingSite {
      * Показать, что приглашение не найдено
      */
     showNoInvitation() {
+        const rsvpSection = document.getElementById('rsvp');
+        rsvpSection.style.display = 'block';
         document.getElementById('no-invitation').style.display = 'block';
         document.getElementById('personal-invitation').style.display = 'none';
         document.getElementById('generic-invitation').style.display = 'none';

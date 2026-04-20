@@ -59,6 +59,36 @@ class WeddingCRUD:
             ),
             Guest.attending == True
         ).scalar()
+
+        # Преобразовать приглашения в словари
+        invitations_list = []
+        for inv in wedding.invitations:
+            inv_dict = {
+                "id": inv.id,
+                "code": inv.code,
+                "type": inv.type,
+                "is_generic": inv.is_generic,
+                "max_guests": inv.max_guests,
+                "personal_message": inv.personal_message,
+                "qr_code_path": inv.qr_code_path,
+                "created_at": inv.created_at,
+                "updated_at": inv.updated_at,
+                "guests": [
+                    {
+                        "id": g.id,
+                        "name": g.name,
+                        "email": g.email,
+                        "phone": g.phone,
+                        "dietary_preferences": g.dietary_preferences,
+                        "attending": g.attending,
+                        "message": g.message,
+                        "created_at": g.created_at,
+                        "updated_at": g.updated_at,
+                    }
+                    for g in inv.guests
+                ]
+            }
+            invitations_list.append(inv_dict)
         
         result = {
             "id": wedding.id,
@@ -74,7 +104,7 @@ class WeddingCRUD:
             "accent_color": wedding.accent_color,
             "schedule": wedding.schedule,
             "additional_info": wedding.additional_info,
-            "invitations": wedding.invitations,
+            "invitations": invitations_list,
             "total_guests": total_guests or 0,
             "confirmed_guests": confirmed_guests or 0,
             "created_at": wedding.created_at,
