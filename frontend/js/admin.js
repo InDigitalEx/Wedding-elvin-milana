@@ -494,9 +494,31 @@ class AdminPanel {
     /**
      * Обновить таблицу гостей
      */
+    escapeHtml(value) {
+        if (value === null || value === undefined) return '';
+
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    formatGuestMessage(message) {
+        if (!message || !String(message).trim()) {
+            return '<span class="guest-message-empty">—</span>';
+        }
+
+        return `<span class="guest-message-text">${this.escapeHtml(message)}</span>`;
+    }
+
     updateGuestsTable() {
         const tbody = document.getElementById('guests-table');
         const filter = document.getElementById('guest-filter')?.value || '';
+        const invitationCodeById = new Map(
+            this.invitations.map((invitation) => [invitation.id, invitation.code])
+        );
 
         let filteredGuests = this.guests;
 
@@ -509,21 +531,29 @@ class AdminPanel {
         }
 
         if (filteredGuests.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6">Гостей не найдено</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="7">Гостей не найдено</td></tr>';
             return;
         }
 
-        tbody.innerHTML = filteredGuests.map(guest => `
+        const groupedGuests = [...filteredGuests].sort((a, b) => {
+            if (a.invitation_id !== b.invitation_id) {
+                return a.invitation_id - b.invitation_id;
+            }
+            return a.id - b.id;
+        });
+
+        tbody.innerHTML = groupedGuests.map(guest => `
             <tr>
-                <td>${guest.name}</td>
-                <td>${guest.email || '-'}</td>
-                <td>${guest.phone || '-'}</td>
+                <td>${this.escapeHtml(invitationCodeById.get(guest.invitation_id) || `ID ${guest.invitation_id}`)}</td>
+                <td>${this.escapeHtml(guest.name)}</td>
+                <td>${guest.email ? this.escapeHtml(guest.email) : '-'}</td>
+                <td>${guest.phone ? this.escapeHtml(guest.phone) : '-'}</td>
                 <td>
                     <span class="response-status ${guest.attending === true ? 'confirmed' : guest.attending === false ? 'pending' : 'no-response'}">
                         ${guest.attending === true ? '✓ Подтвердил' : guest.attending === false ? '✗ Отклонил' : '? Нет ответа'}
                     </span>
                 </td>
-                <td>${APIUtils.getDietaryText(guest.dietary_preferences)}</td>
+                <td class="guest-message-cell">${this.formatGuestMessage(guest.message)}</td>
                 <td>
                     <div class="action-buttons">
                         <button class="btn-small btn-delete" onclick="admin.deleteGuest(${guest.id})">Удалить</button>
@@ -743,13 +773,12 @@ class AdminPanel {
             return;
         }
 
-        const headers = ['Имя', 'Email', 'Телефон', 'Статус', 'Диетические предпочтения', 'Сообщение'];
+        const headers = ['Имя', 'Email', 'Телефон', 'Статус', 'Сообщение'];
         const rows = this.guests.map(guest => [
             guest.name,
             guest.email || '',
             guest.phone || '',
             guest.attending === true ? 'Подтвердил' : guest.attending === false ? 'Отклонил' : 'Нет ответа',
-            APIUtils.getDietaryText(guest.dietary_preferences),
             guest.message || '',
         ]);
 

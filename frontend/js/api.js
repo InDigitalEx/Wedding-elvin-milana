@@ -200,6 +200,13 @@ class WeddingAPI {
     }
 
     /**
+     * Обновить данные гостя
+     */
+    async updateGuest(guestId, data) {
+        return this.put(CONFIG.ENDPOINTS.GUEST_UPDATE(guestId), data);
+    }
+
+    /**
      * Удалить гостя
      */
     async deleteGuest(guestId) {

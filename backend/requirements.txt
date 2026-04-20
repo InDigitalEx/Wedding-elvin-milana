@@ -6,5 +6,4 @@ python-dotenv
 qrcode
 pillow
 python-multipart
-cors
 pydantic-settings

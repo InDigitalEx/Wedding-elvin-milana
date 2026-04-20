@@ -5,10 +5,9 @@ CRUD операции для работы с БД
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from models import Wedding, Invitation, Guest
-from schemas import WeddingSettingsCreate, InvitationCreate, GuestCreate
+from schemas import WeddingSettingsCreate, InvitationCreate, GuestCreate, GuestUpdate
 import uuid
 import qrcode
-from io import BytesIO
 import os
 from datetime import datetime
 
@@ -190,8 +189,9 @@ class InvitationCRUD:
         
         qr_path = f"./qr_codes/{code}.png"
         
-        # Генерируем URL для приглашения
-        url = f"http://localhost:3000/invitation?code={code}"
+        # Генерируем URL для приглашения через основной frontend URL
+        frontend_base_url = os.getenv("FRONTEND_BASE_URL", "http://localhost:8000").rstrip("/")
+        url = f"{frontend_base_url}/?code={code}"
         
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         qr.add_data(url)
@@ -237,6 +237,21 @@ class GuestCRUD:
             return None
         
         guest.attending = attending
+        guest.updated_at = datetime.utcnow()
+        db.commit()
+        db.refresh(guest)
+        return guest
+
+    @staticmethod
+    def update_guest(db: Session, guest_id: int, guest_data: GuestUpdate):
+        """Обновить данные гостя"""
+        guest = db.query(Guest).filter(Guest.id == guest_id).first()
+        if not guest:
+            return None
+
+        for key, value in guest_data.model_dump(exclude_unset=True).items():
+            setattr(guest, key, value)
+
         guest.updated_at = datetime.utcnow()
         db.commit()
         db.refresh(guest)

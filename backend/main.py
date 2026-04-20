@@ -15,10 +15,11 @@ import logging
 from database import init_db, get_db, engine
 from models import Base
 from schemas import (
-    WeddingSettingsCreate, WeddingSettings,
-    InvitationCreate, Invitation,
-    GuestCreate, Guest,
-    WeddingWithAll
+    WeddingSettingsCreate,
+    InvitationCreate,
+    GuestCreate,
+    GuestConfirmRequest,
+    GuestUpdate,
 )
 from crud import (
     wedding_crud, invitation_crud, guest_crud
@@ -66,6 +67,28 @@ def invitation_to_dict(invitation):
         "updated_at": invitation.updated_at,
     }
 
+
+def wedding_to_dict(wedding):
+    """Преобразовать объект Wedding в словарь"""
+    return {
+        "id": wedding.id,
+        "groom_name": wedding.groom_name,
+        "bride_name": wedding.bride_name,
+        "wedding_date": wedding.wedding_date,
+        "wedding_time": wedding.wedding_time,
+        "location": wedding.location,
+        "dress_code": wedding.dress_code,
+        "registry_info": wedding.registry_info,
+        "main_color": wedding.main_color,
+        "secondary_color": wedding.secondary_color,
+        "accent_color": wedding.accent_color,
+        "schedule": wedding.schedule,
+        "additional_info": wedding.additional_info,
+        "created_at": wedding.created_at,
+        "updated_at": wedding.updated_at,
+    }
+
+
 def guest_to_dict(guest):
     """Преобразовать объект Guest в словарь"""
     return {
@@ -90,48 +113,14 @@ def get_wedding_settings(db: Session = Depends(get_db)):
     wedding = wedding_crud.get_wedding(db)
     if not wedding:
         raise HTTPException(status_code=404, detail="Параметры свадьбы не установлены")
-    # Преобразовать в словарь
-    return {
-        "id": wedding.id,
-        "groom_name": wedding.groom_name,
-        "bride_name": wedding.bride_name,
-        "wedding_date": wedding.wedding_date,
-        "wedding_time": wedding.wedding_time,
-        "location": wedding.location,
-        "dress_code": wedding.dress_code,
-        "registry_info": wedding.registry_info,
-        "main_color": wedding.main_color,
-        "secondary_color": wedding.secondary_color,
-        "accent_color": wedding.accent_color,
-        "schedule": wedding.schedule,
-        "additional_info": wedding.additional_info,
-        "created_at": wedding.created_at,
-        "updated_at": wedding.updated_at
-    }
+    return wedding_to_dict(wedding)
 
 
 @app.post("/api/wedding", response_model=dict)
 def create_or_update_wedding(settings: WeddingSettingsCreate, db: Session = Depends(get_db)):
     """Создать или обновить параметры свадьбы"""
     wedding = wedding_crud.create_or_update_wedding(db, settings)
-    # Преобразовать в словарь
-    return {
-        "id": wedding.id,
-        "groom_name": wedding.groom_name,
-        "bride_name": wedding.bride_name,
-        "wedding_date": wedding.wedding_date,
-        "wedding_time": wedding.wedding_time,
-        "location": wedding.location,
-        "dress_code": wedding.dress_code,
-        "registry_info": wedding.registry_info,
-        "main_color": wedding.main_color,
-        "secondary_color": wedding.secondary_color,
-        "accent_color": wedding.accent_color,
-        "schedule": wedding.schedule,
-        "additional_info": wedding.additional_info,
-        "created_at": wedding.created_at,
-        "updated_at": wedding.updated_at
-    }
+    return wedding_to_dict(wedding)
 
 
 @app.get("/api/wedding/full", response_model=dict)
@@ -206,9 +195,18 @@ def create_guest(guest: GuestCreate, db: Session = Depends(get_db)):
 
 
 @app.put("/api/guests/{guest_id}/confirm")
-def confirm_guest(guest_id: int, db: Session = Depends(get_db)):
+def confirm_guest(guest_id: int, payload: GuestConfirmRequest, db: Session = Depends(get_db)):
     """Подтвердить присутствие гостя"""
-    guest = guest_crud.confirm_guest(db, guest_id)
+    guest = guest_crud.confirm_guest(db, guest_id, attending=payload.attending)
+    if not guest:
+        raise HTTPException(status_code=404, detail="Гость не найден")
+    return guest_to_dict(guest)
+
+
+@app.put("/api/guests/{guest_id}", response_model=dict)
+def update_guest(guest_id: int, payload: GuestUpdate, db: Session = Depends(get_db)):
+    """Обновить данные гостя"""
+    guest = guest_crud.update_guest(db, guest_id, payload)
     if not guest:
         raise HTTPException(status_code=404, detail="Гость не найден")
     return guest_to_dict(guest)
@@ -253,7 +251,12 @@ def root():
 frontend_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'frontend'))
 
 # Сервирование главной страницы и assets
-app.mount("/assets", StaticFiles(directory=os.path.join(frontend_path, "assets")), name="assets")
+assets_path = os.path.join(frontend_path, "assets")
+if os.path.isdir(assets_path):
+    app.mount("/assets", StaticFiles(directory=assets_path), name="assets")
+else:
+    logger.warning("Папка assets не найдена: %s. Mount /assets пропущен.", assets_path)
+
 app.mount("/js", StaticFiles(directory=os.path.join(frontend_path, "js")), name="js")
 app.mount("/css", StaticFiles(directory=os.path.join(frontend_path, "css")), name="css")
 

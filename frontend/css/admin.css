@@ -385,6 +385,21 @@
     gap: var(--spacing-sm);
 }
 
+.guest-message-cell {
+    max-width: 320px;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+.guest-message-text {
+    display: inline-block;
+    color: var(--dark);
+}
+
+.guest-message-empty {
+    color: var(--gray-dark);
+}
+
 .btn-small {
     padding: 0.25rem 0.5rem;
     font-size: var(--font-size-xs);

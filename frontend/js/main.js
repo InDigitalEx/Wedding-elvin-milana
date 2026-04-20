@@ -4,7 +4,8 @@ class WeddingSite {
     constructor() {
         this.weddingData = null;
         this.invitationCode = null;
-        this.currentGuest = null;
+        this.currentGuests = [];
+        this.currentInvitation = null;
         this.init();
     }
 
@@ -120,14 +121,13 @@ class WeddingSite {
                 document.getElementById('personal-guest-name').textContent = greeting;
                 document.getElementById('personal-message').textContent = invitation.personal_message || '';
                 
-                // Сохранить первого гостя для RSVP формы
-                this.currentGuest = guests[0];
+                // Сохранить всех гостей текущего приглашения для RSVP формы
+                this.currentGuests = guests;
                 this.currentInvitation = invitation;
                 
-                // Заполнить форму, если уже ответил
-                if (guests[0].attending !== null) {
-                    this.fillRSVPForm(guests[0]);
-                }
+                // Заполнить форму по первому гостю, у которого уже есть ответ
+                const guestWithResponse = guests.find(g => g.attending !== null) || guests[0];
+                this.fillRSVPForm(guestWithResponse);
             }
         }
     }
@@ -164,20 +164,18 @@ class WeddingSite {
      * Заполнить форму RSVP
      */
     fillRSVPForm(guest) {
-        // Установить статус присутствия
-        const attendingRadio = document.querySelector(`input[name="attending"][value="${guest.attending ? 'yes' : 'no'}"]`);
-        if (attendingRadio) {
-            attendingRadio.checked = true;
-        }
+        // Сбросить текущие значения формы, чтобы не переносить старые отметки
+        document.querySelectorAll('input[name="attending"]').forEach((radio) => {
+            radio.checked = false;
+        });
+        document.getElementById('message').value = '';
 
-        // Установить диетические предпочтения
-        if (guest.dietary_preferences && guest.dietary_preferences.length > 0) {
-            guest.dietary_preferences.forEach(pref => {
-                const checkbox = document.querySelector(`input[name="dietary"][value="${pref}"]`);
-                if (checkbox) {
-                    checkbox.checked = true;
-                }
-            });
+        // Установить статус присутствия
+        if (guest.attending !== null) {
+            const attendingRadio = document.querySelector(`input[name="attending"][value="${guest.attending ? 'yes' : 'no'}"]`);
+            if (attendingRadio) {
+                attendingRadio.checked = true;
+            }
         }
 
         // Установить сообщение
@@ -404,22 +402,31 @@ class WeddingSite {
     async handleRSVPSubmit(e) {
         e.preventDefault();
 
-        if (!this.currentGuest || !this.currentInvitation) {
+        if (!this.currentGuests || this.currentGuests.length === 0 || !this.currentInvitation) {
             showNotification('Ошибка: приглашение не загружено', 'error');
             return;
         }
 
         try {
             // Получить данные формы
-            const attending = document.querySelector('input[name="attending"]:checked').value === 'yes';
-            const dietary = Array.from(document.querySelectorAll('input[name="dietary"]:checked')).map(el => el.value);
+            const selectedAttending = document.querySelector('input[name="attending"]:checked');
+            if (!selectedAttending) {
+                showNotification('Пожалуйста, укажите, сможете ли вы присутствовать', 'error');
+                return;
+            }
+
+            const attending = selectedAttending.value === 'yes';
             const message = document.getElementById('message').value;
 
-            // Обновить гостя
-            await api.confirmGuest(this.currentGuest.id, attending);
-
-            // TODO: Обновить диетические предпочтения и сообщение
-            // await api.updateGuest(this.currentGuest.id, { dietary_preferences: dietary, message });
+            // Применить RSVP ко всем гостям в рамках этого приглашения
+            await Promise.all(
+                this.currentGuests.map(async (guest) => {
+                    await api.confirmGuest(guest.id, attending);
+                    await api.updateGuest(guest.id, {
+                        message,
+                    });
+                })
+            );
 
             showNotification(`Спасибо за ответ! Вы ${attending ? 'подтвердили' : 'отклонили'} приглашение.`, 'success');
 

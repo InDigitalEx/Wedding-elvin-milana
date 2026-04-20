@@ -21,6 +21,7 @@ const CONFIG = {
         GUESTS: '/api/guests',
         GUEST_BY_CODE: (code) => `/api/guests?invitation_code=${code}`,
         GUEST_CONFIRM: (id) => `/api/guests/${id}/confirm`,
+        GUEST_UPDATE: (id) => `/api/guests/${id}`,
         GUEST_DELETE: (id) => `/api/guests/${id}`,
     },
 
