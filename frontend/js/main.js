@@ -58,10 +58,10 @@ class WeddingSite {
                 groom_name: 'Жених',
                 bride_name: 'Невеста',
                 wedding_date: new Date(),
-                wedding_time: '14:00',
-                location: 'Место проведения',
-                dress_code: '',
-                registry_info: '',
+                wedding_time: '18:00',
+                location: 'Будет позже...',
+                dress_code: 'Будет позже...',
+                registry_info: 'Будет позже...',
                 schedule: [],
                 main_color: '#8b7355',
                 secondary_color: '#d4a574',
@@ -208,7 +208,7 @@ class WeddingSite {
         // Информация о мероприятии
         document.getElementById('about-text-content').innerHTML = this.markdownToHTML(
             data.additional_info ||
-            'Мы с радостью делимся этим особенным днем с нашими близкими! Ваше присутствие - это главный подарок для нас.'
+            'Информация будет добавлена позже...'
         );
 
         // Дресс-код
@@ -216,7 +216,7 @@ class WeddingSite {
         if (data.dress_code) {
             dressCodeElement.innerHTML = this.markdownToHTML(data.dress_code);
         } else {
-            dressCodeElement.innerHTML = '<p>Элегантный вечерний наряд</p>';
+            dressCodeElement.innerHTML = '<p>Информация будет добавлена позже...</p>';
         }
 
         // Реестр подарков
@@ -224,7 +224,7 @@ class WeddingSite {
         if (data.registry_info) {
             registryElement.innerHTML = this.markdownToHTML(data.registry_info);
         } else {
-            registryElement.innerHTML = '<p>Информация о реестре подарков будет добавлена позже</p>';
+            registryElement.innerHTML = '<p>Информация будет добавлена позже...</p>';
         }
 
         // Расписание
@@ -289,13 +289,7 @@ class WeddingSite {
 
         if (!schedule || schedule.length === 0) {
             schedule = [
-                { time: '14:00', event: 'Встреча гостей' },
-                { time: '14:30', event: 'Начало церемонии' },
-                { time: '15:30', event: 'Апероль' },
-                { time: '16:00', event: 'Ужин' },
-                { time: '19:00', event: 'Первый танец' },
-                { time: '19:30', event: 'Танцы и развлечения' },
-                { time: '23:00', event: 'Завершение' },
+                { time: '18:00', event: 'Начало' },
             ];
         }
 

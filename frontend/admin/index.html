@@ -52,10 +52,6 @@
         <header class="admin-header">
             <div class="header-content">
                 <h1 id="section-title">Панель управления</h1>
-                <div class="header-info">
-                    <span id="user-info">Жених & Невеста</span>
-                    <button class="btn-logout">Выход</button>
-                </div>
             </div>
         </header>
 
@@ -126,6 +122,11 @@
                         </div>
 
                         <div class="form-group">
+                            <label for="additional-info">Дополнительная информация (О нас)</label>
+                            <textarea id="additional-info" name="additional_info" rows="4" placeholder="Всем привет это наша свадьба..."></textarea>
+                        </div>                        
+
+                        <div class="form-group">
                             <label for="dress-code">Требования к дресс-коду</label>
                             <textarea id="dress-code" name="dress_code" rows="4" placeholder="Описание дресс-кода..."></textarea>
                         </div>
@@ -135,10 +136,7 @@
                             <textarea id="registry-info" name="registry_info" rows="4" placeholder="Ссылка на реестр, адрес, информация..."></textarea>
                         </div>
 
-                        <div class="form-group">
-                            <label for="additional-info">Дополнительная информация</label>
-                            <textarea id="additional-info" name="additional_info" rows="4" placeholder="Паркинг, транспорт и т.д."></textarea>
-                        </div>
+
 
                         <button type="submit" class="btn btn-primary">Сохранить параметры</button>
                     </form>

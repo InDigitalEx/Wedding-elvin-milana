@@ -2,3 +2,5 @@
 backend/qr_codes/*.png
 backend/__pycache__
 backend/wedding.db
+backend/venv/
+backend/.venv/

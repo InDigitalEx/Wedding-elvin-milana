@@ -48,18 +48,14 @@ def init_db():
             bride_name="Невеста",
             wedding_date=datetime.now() + timedelta(days=30),
             wedding_time="18:00",
-            location="Место проведения",
-            dress_code="Элегантный вечерний наряд",
-            registry_info="Информация о подарках",
+            location="Будет позже...",
+            dress_code="Будет позже...",
+            registry_info="Будет позже...",
             main_color="#8b7355",
             secondary_color="#d4a574",
             accent_color="#e8d5c4",
             schedule=[
-                {"time": "18:00", "event": "Встреча гостей"},
-                {"time": "18:30", "event": "Начало церемонии"},
-                {"time": "19:30", "event": "Апероль"},
-                {"time": "20:00", "event": "Ужин"},
-                {"time": "22:00", "event": "Танцы"},
+                {"time": "18:00", "event": "Начало"}
             ]
         )
         db.add(default_wedding)
