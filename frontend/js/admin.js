@@ -84,9 +84,10 @@ class AdminPanel {
         
         container.innerHTML = recentGuests.map(guest => `
             <div class="response-item">
-                <div>
+                <div class="response-main">
                     <div class="response-name">${guest.name}</div>
                     <small>${APIUtils.formatDate(guest.updated_at)}</small>
+                    ${this.formatResponseMessage(guest.message)}
                 </div>
                 <span class="response-status ${guest.attending === true ? 'confirmed' : guest.attending === false ? 'pending' : 'no-response'}">
                     ${guest.attending === true ? '✓ Подтвердил' : guest.attending === false ? '✗ Отклонил' : '? Нет ответа'}
@@ -308,6 +309,11 @@ class AdminPanel {
             dress_code: document.getElementById('dress-code').value || '',
             registry_info: document.getElementById('registry-info').value || '',
             additional_info: document.getElementById('additional-info').value || '',
+            // Сохраняем текущие поля, которые не редактируются в этой форме
+            schedule: this.weddingData?.schedule || [],
+            main_color: this.weddingData?.main_color || '#8b7355',
+            secondary_color: this.weddingData?.secondary_color || '#d4a574',
+            accent_color: this.weddingData?.accent_color || '#e8d5c4',
         };
 
         try {
@@ -515,6 +521,19 @@ class AdminPanel {
         }
 
         return `<span class="guest-message-text">${this.escapeHtml(message)}</span>`;
+    }
+
+    formatResponseMessage(message, maxLength = 160) {
+        if (!message || !String(message).trim()) {
+            return '';
+        }
+
+        const trimmedMessage = String(message).trim();
+        const preview = trimmedMessage.length > maxLength
+            ? `${trimmedMessage.slice(0, maxLength).trimEnd()}...`
+            : trimmedMessage;
+
+        return `<div class="response-message">"${this.escapeHtml(preview)}"</div>`;
     }
 
     updateGuestsTable() {

@@ -218,6 +218,69 @@ a:hover {
     gap: var(--spacing-lg);
 }
 
+/* Текстовые блоки приглашения */
+.personal-info,
+.about-text,
+.dress-code-content,
+.registry-content {
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(250, 247, 242, 0.95) 100%);
+    border: 1px solid rgba(139, 115, 85, 0.18);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+}
+
+#personal-message,
+#about-text-content,
+#dress-code-text,
+#registry-text {
+    color: var(--dark);
+    font-size: var(--font-size-lg);
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+}
+
+#personal-message {
+    font-style: italic;
+    margin-bottom: 0;
+}
+
+#about-text-content p,
+#dress-code-text p,
+#registry-text p {
+    margin-bottom: var(--spacing-md);
+}
+
+#about-text-content p:last-child,
+#dress-code-text p:last-child,
+#registry-text p:last-child {
+    margin-bottom: 0;
+}
+
+#dress-code-text h2,
+#registry-text h2 {
+    font-size: var(--font-size-2xl);
+    color: var(--primary);
+    margin-bottom: var(--spacing-md);
+}
+
+#dress-code-text h3,
+#registry-text h3 {
+    font-size: var(--font-size-xl);
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+#dress-code-text ul,
+#registry-text ul {
+    margin: 0 0 var(--spacing-md) var(--spacing-lg);
+}
+
+#dress-code-text li,
+#registry-text li {
+    margin-bottom: var(--spacing-sm);
+}
+
 /* Радио и чекбоксы */
 .radio-group,
 .checkbox-group {

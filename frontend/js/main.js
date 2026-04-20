@@ -206,8 +206,10 @@ class WeddingSite {
         document.getElementById('location-text').textContent = data.location;
 
         // Информация о мероприятии
-        document.getElementById('about-text-content').textContent = data.additional_info || 
-            'Мы с радостью делимся этим особенным днем с нашими близкими! Ваше присутствие - это главный подарок для нас.';
+        document.getElementById('about-text-content').innerHTML = this.markdownToHTML(
+            data.additional_info ||
+            'Мы с радостью делимся этим особенным днем с нашими близкими! Ваше присутствие - это главный подарок для нас.'
+        );
 
         // Дресс-код
         const dressCodeElement = document.getElementById('dress-code-text');
