@@ -469,6 +469,10 @@ class AdminPanel {
      */
     updateInvitationsTable() {
         const tbody = document.getElementById('invitations-table');
+        const guestCountByInvitation = this.guests.reduce((acc, guest) => {
+            acc[guest.invitation_id] = (acc[guest.invitation_id] || 0) + 1;
+            return acc;
+        }, {});
         
         if (this.invitations.length === 0) {
             tbody.innerHTML = '<tr><td colspan="5">Приглашения не созданы</td></tr>';
@@ -479,7 +483,7 @@ class AdminPanel {
             <tr>
                 <td>${inv.code}</td>
                 <td>${inv.type === 'personal' ? 'Личное' : 'Общее'}</td>
-                <td>${inv.max_guests}</td>
+                <td>${guestCountByInvitation[inv.id] || 0}</td>
                 <td>${APIUtils.formatDate(inv.created_at)}</td>
                 <td>
                     <div class="action-buttons">
@@ -531,7 +535,7 @@ class AdminPanel {
         }
 
         if (filteredGuests.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7">Гостей не найдено</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="5">Гостей не найдено</td></tr>';
             return;
         }
 
@@ -546,8 +550,6 @@ class AdminPanel {
             <tr>
                 <td>${this.escapeHtml(invitationCodeById.get(guest.invitation_id) || `ID ${guest.invitation_id}`)}</td>
                 <td>${this.escapeHtml(guest.name)}</td>
-                <td>${guest.email ? this.escapeHtml(guest.email) : '-'}</td>
-                <td>${guest.phone ? this.escapeHtml(guest.phone) : '-'}</td>
                 <td>
                     <span class="response-status ${guest.attending === true ? 'confirmed' : guest.attending === false ? 'pending' : 'no-response'}">
                         ${guest.attending === true ? '✓ Подтвердил' : guest.attending === false ? '✗ Отклонил' : '? Нет ответа'}
@@ -755,9 +757,30 @@ class AdminPanel {
         if (!confirm('Вы уверены?')) return;
 
         try {
+            const guestToDelete = this.guests.find((guest) => guest.id === guestId);
+            const invitationId = guestToDelete ? guestToDelete.invitation_id : null;
+
             await api.deleteGuest(guestId);
             showNotification('✓ Гость удален', 'success');
             await this.loadData();
+
+            // Если удалили последнего гостя в приглашении, предложить удалить пустое приглашение
+            if (invitationId !== null) {
+                const hasGuestsInInvitation = this.guests.some(
+                    (guest) => guest.invitation_id === invitationId
+                );
+
+                if (!hasGuestsInInvitation) {
+                    const invitation = this.invitations.find((inv) => inv.id === invitationId);
+                    if (invitation && confirm(`В приглашении ${invitation.code} больше нет гостей. Удалить это приглашение?`)) {
+                        await api.deleteInvitation(invitation.code);
+                        showNotification('✓ Пустое приглашение удалено', 'success');
+                        await this.loadData();
+                    }
+                }
+            }
+
+            this.updateInvitationsTable();
             this.updateGuestsTable();
         } catch (error) {
             showNotification('✗ Ошибка удаления гостя', 'error');
@@ -773,11 +796,9 @@ class AdminPanel {
             return;
         }
 
-        const headers = ['Имя', 'Email', 'Телефон', 'Статус', 'Сообщение'];
+        const headers = ['Имя', 'Статус', 'Сообщение'];
         const rows = this.guests.map(guest => [
             guest.name,
-            guest.email || '',
-            guest.phone || '',
             guest.attending === true ? 'Подтвердил' : guest.attending === false ? 'Отклонил' : 'Нет ответа',
             guest.message || '',
         ]);

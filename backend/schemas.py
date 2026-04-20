@@ -77,8 +77,6 @@ class GuestUpdate(BaseModel):
     """Схема обновления данных гостя"""
     dietary_preferences: Optional[List[str]] = None
     message: Optional[str] = None
-    email: Optional[str] = None
-    phone: Optional[str] = None
 
     model_config = ConfigDict(from_attributes=True)
 
