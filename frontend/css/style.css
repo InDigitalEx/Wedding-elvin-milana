@@ -484,10 +484,6 @@ a:hover {
         font-size: var(--font-size-sm);
     }
 
-    .hamburger {
-        display: flex;
-    }
-
     .nav-menu {
         position: absolute;
         top: 60px;
