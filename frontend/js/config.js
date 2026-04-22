@@ -2,6 +2,7 @@
 
 const CONFIG = {
     // API
+    API_BASE_URL: '/',
 
     API_VERSION: 'v1',
 
@@ -71,3 +72,4 @@ const CONFIG = {
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CONFIG;
 }
+
