@@ -2,7 +2,7 @@
 
 const CONFIG = {
     // API
-    API_BASE_URL: '/',
+    API_BASE_URL: window.location.origin,
 
     API_VERSION: 'v1',
 
