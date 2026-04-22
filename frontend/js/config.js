@@ -2,7 +2,7 @@
 
 const CONFIG = {
     // API
-    API_BASE_URL: window.location.origin.endsWith(':8000') ? '/' : '/api',
+
     API_VERSION: 'v1',
 
     // Пути API
