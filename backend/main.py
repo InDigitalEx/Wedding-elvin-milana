@@ -3,7 +3,7 @@
 Главный файл приложения FastAPI
 """
 
-from fastapi import FastAPI, HTTPException, Depends, File, UploadFile
+from fastapi import FastAPI, HTTPException, Depends, File, UploadFile, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
@@ -167,9 +167,9 @@ def delete_invitation(invitation_code: str, db: Session = Depends(get_db)):
 
 
 @app.get("/api/invitations/{invitation_code}/qr")
-def get_invitation_qr(invitation_code: str, db: Session = Depends(get_db)):
+def get_invitation_qr(invitation_code: str, request: Request, db: Session = Depends(get_db)):
     """Получить QR код приглашения"""
-    qr_path = invitation_crud.generate_qr_code(invitation_code)
+    qr_path = invitation_crud.generate_qr_code(invitation_code, request=request)
     if not os.path.exists(qr_path):
         raise HTTPException(status_code=404, detail="QR код не найден")
     return FileResponse(qr_path, media_type="image/png")

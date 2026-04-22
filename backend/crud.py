@@ -10,6 +10,7 @@ import uuid
 import qrcode
 import os
 from datetime import datetime
+from fastapi import Request
 
 
 class WeddingCRUD:
@@ -183,15 +184,21 @@ class InvitationCRUD:
         return True
 
     @staticmethod
-    def generate_qr_code(code: str, size: int = 300):
+    def generate_qr_code(code: str, request: Request = None, size: int = 300):
         """Генерировать QR код для приглашения"""
         os.makedirs("./qr_codes", exist_ok=True)
         
         qr_path = f"./qr_codes/{code}.png"
         
         # Генерируем URL для приглашения через основной frontend URL
-        frontend_base_url = os.getenv("FRONTEND_BASE_URL", "http://localhost:8000").rstrip("/")
-        url = f"{frontend_base_url}/?code={code}"
+        frontend_base_url = os.getenv("FRONTEND_BASE_URL", "").rstrip("/")
+        if frontend_base_url:
+            base_url = frontend_base_url
+        elif request:
+            base_url = f"{request.url.scheme}://{request.url.hostname}"
+        else:
+            base_url = ""
+        url = f"{base_url}/?code={code}".rstrip('/')
         
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         qr.add_data(url)
