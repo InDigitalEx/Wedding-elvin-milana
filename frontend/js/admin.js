@@ -128,15 +128,29 @@ class AdminPanel {
      * Установить сайдбар
      */
     setupSidebar() {
-        const toggle = document.getElementById('sidebar-toggle');
         const sidebar = document.querySelector('.sidebar');
-
-        if (toggle) {
+        const toggles = document.querySelectorAll('#sidebar-toggle, .hamburger');
+        
+        toggles.forEach(toggle => {
             toggle.addEventListener('click', () => {
                 sidebar.classList.toggle('open');
             });
-        }
-    }
+        });
+        
+        // Закрыть сайдбар при клике на nav-link в navbar
+        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
+            link.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+            });
+        });
+        
+        // Закрыть при клике вне сайдбара (мобильная версия)
+        document.addEventListener('click', (e) => {
+            if (!sidebar.contains(e.target) && 
+                !e.target.closest('.navbar') && 
+                sidebar.classList.contains('open')) {
+                sidebar.classList.remove('open');
+            }
 
     /**
      * Установить обработчики форм

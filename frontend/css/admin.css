@@ -617,15 +617,26 @@
     .sidebar-toggle {
         display: block;
         position: fixed;
-        top: 20px;
-        left: 20px;
+        top: var(--spacing-sm);
+        right: var(--spacing-md);
+        left: auto;
         z-index: 1001;
-        width: 50px;
-        height: 50px;
+        width: 52px;
+        height: 52px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
-        backdrop-filter: blur(10px);
+        background: var(--primary);
+        backdrop-filter: blur(20px);
+        border: 2px solid var(--secondary);
+        font-size: var(--font-size-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
+
+    .sidebar-toggle::before {
+        content: '☰';
+    }
+
 
     .admin-main.open-sidebar {
         padding-left: 0;
@@ -718,10 +729,11 @@
     }
 
     .sidebar-toggle {
-        top: 15px;
-        left: 15px;
-        width: 45px;
-        height: 45px;
+        top: var(--spacing-xs);
+        right: var(--spacing-sm);
+        width: 48px;
+        height: 48px;
+        font-size: var(--font-size-lg);
     }
 
     .admin-header {
