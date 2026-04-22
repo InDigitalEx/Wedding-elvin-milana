@@ -4,3 +4,4 @@ backend/__pycache__
 backend/wedding.db
 backend/venv/
 backend/.venv/
+.vscode
