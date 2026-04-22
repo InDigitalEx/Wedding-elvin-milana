@@ -128,29 +128,44 @@ class AdminPanel {
      * Установить сайдбар
      */
     setupSidebar() {
+        const toggle = document.getElementById('sidebar-toggle');
         const sidebar = document.querySelector('.sidebar');
-        const toggles = document.querySelectorAll('#sidebar-toggle, .hamburger');
-        
-        toggles.forEach(toggle => {
-            toggle.addEventListener('click', () => {
+        const adminMain = document.querySelector('.admin-main');
+
+        if (toggle) {
+            toggle.addEventListener('click', (e) => {
+                e.stopPropagation();
                 sidebar.classList.toggle('open');
+                adminMain.classList.toggle('sidebar-open');
+            });
+        }
+
+        // Закрытие по клику на nav-item
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                sidebar.classList.remove('open');
+                adminMain.classList.remove('sidebar-open');
             });
         });
-        
-        // Закрыть сайдбар при клике на nav-link в navbar
-        document.querySelectorAll('.nav-link[data-section]').forEach(link => {
-            link.addEventListener('click', () => {
+
+        // Закрытие по ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && sidebar.classList.contains('open')) {
                 sidebar.classList.remove('open');
-            });
-        });
-        
-        // Закрыть при клике вне сайдбара (мобильная версия)
-        document.addEventListener('click', (e) => {
-            if (!sidebar.contains(e.target) && 
-                !e.target.closest('.navbar') && 
-                sidebar.classList.contains('open')) {
-                sidebar.classList.remove('open');
+                adminMain.classList.remove('sidebar-open');
             }
+        });
+
+        // Закрытие по клику на overlay/backdrop
+        document.addEventListener('click', (e) => {
+            if (sidebar.classList.contains('open') && 
+                !sidebar.contains(e.target) && 
+                !toggle?.contains(e.target)) {
+                sidebar.classList.remove('open');
+                adminMain.classList.remove('sidebar-open');
+            }
+        });
+    }
 
     /**
      * Установить обработчики форм
