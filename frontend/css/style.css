@@ -475,6 +475,9 @@ a:hover {
 .footer p {
     margin-bottom: var(--spacing-sm);
 }
+.timeline-dot {
+        display: none;
+    }
 
 /* ==================== АДАПТИВНОСТЬ ==================== */
 
@@ -516,6 +519,9 @@ a:hover {
     .form-row {
         grid-template-columns: 1fr;
     }
+    .timeline-dot {
+        display: none;
+    }
 }
 
 @media (max-width: 480px) {
@@ -540,5 +546,8 @@ a:hover {
     .btn {
         padding: var(--spacing-sm) var(--spacing-lg);
         font-size: var(--font-size-sm);
+    }
+    .timeline-dot {
+        display: none;
     }
 }
