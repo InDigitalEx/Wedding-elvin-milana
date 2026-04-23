@@ -139,7 +139,7 @@ class WeddingSite {
         if (names.length === 0) {
             return 'Уважаемый(ые) гость(и)';
         } else if (names.length === 1) {
-            return `Уважаемый ${names[0]}`;
+            return `Уважаемый(ая) ${names[0]}`;
         } else if (names.length === 2) {
             return `Уважаемые ${names[0]} и ${names[1]}`;
         } else {
