@@ -768,5 +768,48 @@
         width: 100%;
         margin-bottom: var(--spacing-sm);
     }
+
+    /* ==== Mobile enhancements for admin panel ==== */
+    .sidebar-toggle {
+        display: block;
+        position: fixed;
+        top: var(--spacing-sm);
+        right: var(--spacing-md);
+        z-index: 1001;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--primary);
+        color: var(--white);
+        border: none;
+        font-size: var(--font-size-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-md);
+    }
+
+    .admin-header h1 {
+        font-size: var(--font-size-2xl);
+    }
+
+    .admin-content {
+        padding: var(--spacing-lg);
+    }
+
+    .admin-content > .section {
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .card {
+        box-shadow: var(--shadow-sm);
+        border-radius: var(--radius-md);
+    }
+
+    .data-table th,
+    .data-table td {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm);
+    }
 }
 
