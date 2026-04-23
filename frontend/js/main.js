@@ -139,13 +139,13 @@ class WeddingSite {
         if (names.length === 0) {
             return 'Уважаемый(ые) гость(и)';
         } else if (names.length === 1) {
-            return `Уважаемый(ая) ${names[0]}`;
+            return `${names[0]}`;
         } else if (names.length === 2) {
-            return `Уважаемые ${names[0]} и ${names[1]}`;
+            return `${names[0]} и ${names[1]}`;
         } else {
             // Для более чем 2 гостей: "Уважаемые Иван, Мария и Петр"
             const allButLast = names.slice(0, -1).join(', ');
-            return `Уважаемые ${allButLast} и ${names[names.length - 1]}`;
+            return `${allButLast} и ${names[names.length - 1]}`;
         }
     }
 
